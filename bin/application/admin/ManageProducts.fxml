@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane style="-fx-font-size: 18px;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25" fx:controller="application.admin.ManageProductsController">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #1B5E20; -fx-padding: 10;">
+            <Label style="-fx-text-fill: white; -fx-font-size: 22; -fx-font-weight: bold;" text="Manage Products &amp; Inventory" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button onAction="#goToDashboard" style="-fx-background-color: #FF8F00; -fx-text-fill: white;" text="Dashboard" />
+            <Button onAction="#logout" style="-fx-background-color: #C62828; -fx-text-fill: white;" text="Logout" />
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="15">
+            <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
+
+            <!-- Product Table -->
+            <TableView fx:id="tblProducts" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="colId" prefWidth="60" text="ID" />
+                    <TableColumn fx:id="colName" prefWidth="180" text="Name" />
+                    <TableColumn fx:id="colDescription" prefWidth="280" text="Description" />
+                    <TableColumn fx:id="colPrice" prefWidth="100" text="Price" />
+                    <TableColumn fx:id="colStock" prefWidth="100" text="Stock" />
+                </columns>
+            </TableView>
+
+            <!-- Stock Update Row -->
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Add Stock:" />
+                <Spinner fx:id="spnAddStock" prefWidth="80" />
+                <Button onAction="#updateStock" style="-fx-background-color: #2E7D32; -fx-text-fill: white;" text="Update Stock" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Button onAction="#deleteProduct" style="-fx-background-color: #C62828; -fx-text-fill: white;" text="Delete Product" />
+            </HBox>
+
+            <Label fx:id="lblMessage" text="" />
+
+            <!-- Add New Product Row -->
+            <Label style="-fx-font-weight: bold; -fx-font-size: 20;" text="Add New Product" />
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <TextField fx:id="txtName" promptText="Name" prefWidth="160" />
+                <TextField fx:id="txtDesc" promptText="Description" prefWidth="220" />
+                <TextField fx:id="txtPrice" promptText="Price" prefWidth="90" />
+                <TextField fx:id="txtStock" promptText="Stock" prefWidth="90" />
+                <Button onAction="#addProduct" style="-fx-background-color: #4E342E; -fx-text-fill: white;" text="Add Product" />
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane style="-fx-font-size: 24;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25" fx:controller="application.admin.ManageOrdersController">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #1B5E20; -fx-padding: 10;">
+            <Label style="-fx-text-fill: white; -fx-font-size: 24; -fx-font-weight: bold;" text="Manage Orders" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button onAction="#goToDashboard" style="-fx-background-color: #FF8F00; -fx-text-fill: white;-fx-font-size: 24; " text="Dashboard" />
+            <Button onAction="#logout" style="-fx-background-color: #C62828; -fx-text-fill: white;-fx-font-size: 24; " text="Logout" />
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="15">
+            <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
+
+            <TableView fx:id="tblOrders" VBox.vgrow="ALWAYS" >
+                <columns>
+                    <TableColumn fx:id="colOrderId" prefWidth="80" text="Order ID" />
+                    <TableColumn fx:id="colUsername" prefWidth="120" text="Customer" />
+                    <TableColumn fx:id="colCountry" prefWidth="100" text="Country" />
+                    <TableColumn fx:id="colShipping" prefWidth="100" text="Shipping" />
+                    <TableColumn fx:id="colTotal" prefWidth="100" text="Total" />
+                    <TableColumn fx:id="colStatus" prefWidth="110" text="Status" />
+                    <TableColumn fx:id="colDate" prefWidth="120" text="Date" />
+                </columns>
+            </TableView>
+
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Update Status:" style="-fx-font-size: 24;"/>
+                <ComboBox fx:id="cmbStatus" prefWidth="160" />
+                <Button onAction="#updateStatus" style="-fx-background-color: #2E7D32; -fx-text-fill: white; -fx-font-size: 24;" text="Update Status" />
+                <Label fx:id="lblMessage" />
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

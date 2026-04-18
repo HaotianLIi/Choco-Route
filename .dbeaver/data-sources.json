@@ -1,0 +1,35 @@
+{
+	"folders": {},
+	"connections": {
+		"sqlite_jdbc-19d84060fb1-458cdb2c7f3da152": {
+			"provider": "sqlite",
+			"driver": "sqlite_jdbc",
+			"name": "chocoroute.db",
+			"save-password": true,
+			"configuration": {
+				"database": "/home/frankie/CST-3102-Programming/Assignment/chocoroute.db",
+				"url": "jdbc:sqlite:/home/frankie/CST-3102-Programming/Assignment/chocoroute.db",
+				"configurationType": "URL",
+				"type": "dev",
+				"closeIdleConnection": true
+			}
+		}
+	},
+	"virtual-models": {"sqlite_jdbc-19d84060fb1-458cdb2c7f3da152":{"@properties":{"erd.diagram.state":{"serialized":"\u003cdiagram version\u003d\"1\" name\u003d\"empty\" time\u003d\"202604122046\"\u003e\u003centities\u003e\u003cdata-source id\u003d\"sqlite_jdbc-19d84060fb1-458cdb2c7f3da152\"\u003e\u003centity id\u003d\"1\" name\u003d\"cart\" fq-name\u003d\"cart\" order\u003d\"0\" font\u003d\"Segoe UI:9:0\" x\u003d\"40\" y\u003d\"40\"/\u003e\u003centity id\u003d\"2\" name\u003d\"flyway_schema_history\" fq-name\u003d\"flyway_schema_history\" order\u003d\"1\" font\u003d\"Segoe UI:9:0\" x\u003d\"212\" y\u003d\"633\"/\u003e\u003centity id\u003d\"3\" name\u003d\"orderItems\" fq-name\u003d\"orderItems\" order\u003d\"2\" font\u003d\"Segoe UI:9:0\" x\u003d\"40\" y\u003d\"281\"/\u003e\u003centity id\u003d\"4\" name\u003d\"orders\" fq-name\u003d\"orders\" order\u003d\"3\" font\u003d\"Segoe UI:9:0\" x\u003d\"212\" y\u003d\"381\"/\u003e\u003centity id\u003d\"5\" name\u003d\"products\" fq-name\u003d\"products\" order\u003d\"4\" font\u003d\"Segoe UI:9:0\" x\u003d\"212\" y\u003d\"150\"/\u003e\u003centity id\u003d\"6\" name\u003d\"shippingFees\" fq-name\u003d\"shippingFees\" order\u003d\"5\" font\u003d\"Segoe UI:9:0\" x\u003d\"38\" y\u003d\"660\"/\u003e\u003centity id\u003d\"7\" name\u003d\"users\" fq-name\u003d\"users\" order\u003d\"6\" font\u003d\"Segoe UI:9:0\" x\u003d\"438\" y\u003d\"40\"/\u003e\u003c/data-source\u003e\u003c/entities\u003e\u003crelations\u003e\u003crelation name\u003d\"FK_orderItems_orders\" fq-name\u003d\"orderItems.FK_orderItems_orders\" type\u003d\"fk\" pk-ref\u003d\"4\" fk-ref\u003d\"3\"/\u003e\u003crelation name\u003d\"FK_cart_products\" fq-name\u003d\"cart.FK_cart_products\" type\u003d\"fk\" pk-ref\u003d\"5\" fk-ref\u003d\"1\"/\u003e\u003crelation name\u003d\"FK_orderItems_products_2\" fq-name\u003d\"orderItems.FK_orderItems_products_2\" type\u003d\"fk\" pk-ref\u003d\"5\" fk-ref\u003d\"3\"/\u003e\u003crelation name\u003d\"FK_cart_users_2\" fq-name\u003d\"cart.FK_cart_users_2\" type\u003d\"fk\" pk-ref\u003d\"7\" fk-ref\u003d\"1\"/\u003e\u003crelation name\u003d\"FK_orders_users\" fq-name\u003d\"orders.FK_orders_users\" type\u003d\"fk\" pk-ref\u003d\"7\" fk-ref\u003d\"4\"/\u003e\u003c/relations\u003e\u003c/diagram\u003e"}}}},
+	"connection-types": {
+		"dev": {
+			"name": "Development",
+			"color": "255,255,255",
+			"description": "Regular development database",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false,
+			"smart-commit": false,
+			"smart-commit-recover": true,
+			"auto-close-transactions": true,
+			"close-transactions-period": 1800,
+			"auto-close-connections": true,
+			"close-connections-period": 14400
+		}
+	}
+}

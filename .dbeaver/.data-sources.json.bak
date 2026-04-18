@@ -1,0 +1,34 @@
+{
+	"folders": {},
+	"connections": {
+		"sqlite_jdbc-19d84060fb1-458cdb2c7f3da152": {
+			"provider": "sqlite",
+			"driver": "sqlite_jdbc",
+			"name": "chocoroute.db",
+			"save-password": true,
+			"configuration": {
+				"database": "/home/frankie/CST-3102-Programming/Assignment/chocoroute.db",
+				"url": "jdbc:sqlite:/home/frankie/CST-3102-Programming/Assignment/chocoroute.db",
+				"configurationType": "URL",
+				"type": "dev",
+				"closeIdleConnection": true
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Development",
+			"color": "255,255,255",
+			"description": "Regular development database",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false,
+			"smart-commit": false,
+			"smart-commit-recover": true,
+			"auto-close-transactions": true,
+			"close-transactions-period": 1800,
+			"auto-close-connections": true,
+			"close-connections-period": 14400
+		}
+	}
+}

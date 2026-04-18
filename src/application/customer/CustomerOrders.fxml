@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane style="-fx-font-size: 20px;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25" fx:controller="application.customer.CustomerOrdersController">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #4E342E; -fx-padding: 10;">
+            <Label style="-fx-text-fill: white; -fx-font-size: 24; -fx-font-weight: bold;" text="My Orders" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button onAction="#goToDashboard" style="-fx-background-color: #FF8F00; -fx-text-fill: white;" text="Continue Shopping" />
+            <Button onAction="#logout" style="-fx-background-color: #C62828; -fx-text-fill: white;" text="Logout" />
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="15">
+            <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
+
+            <TableView fx:id="tblOrders" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="colOrderId" prefWidth="80" text="Order ID" style="-fx-font-size: 20;" />
+                    <TableColumn fx:id="colCountry" prefWidth="150" text="Country" style="-fx-font-size: 20;" />
+                    <TableColumn fx:id="colShipping" prefWidth="120" text="Shipping" style="-fx-font-size: 20;" />
+                    <TableColumn fx:id="colTotal" prefWidth="120" text="Total" style="-fx-font-size: 20;" />
+                    <TableColumn fx:id="colStatus" prefWidth="120" text="Status" style="-fx-font-size: 20;" />
+                    <TableColumn fx:id="colDate" prefWidth="140" text="Date" style="-fx-font-size: 20;" />
+                </columns>
+            </TableView>
+
+            <Label fx:id="lblMessage" text="" />
+        </VBox>
+    </center>
+</BorderPane>
