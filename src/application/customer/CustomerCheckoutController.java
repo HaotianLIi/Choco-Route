@@ -1,7 +1,10 @@
 package application.customer;
 
 import application.UIHelper;
-import application.db.*;
+import application.db.CartDAO;
+import application.db.OrderDAO;
+import application.db.ProductDAO;
+import application.db.ShippingDAO;
 import application.login.SceneManager;
 import application.login.UserSession;
 import javafx.beans.property.SimpleStringProperty;
@@ -30,31 +33,28 @@ public class CustomerCheckoutController {
 
     @FXML
     public void initialize() {
-        // Cart query returns: [0]=cartId, [1]=productName, [2]=price, [3]=quantity
-        UIHelper.bindColumn(colProduct, 1);
-        UIHelper.bindColumn(colPrice, 2, "$");
-        UIHelper.bindColumn(colQuantity, 3);
+        // Cart row layout: [0]=cartId, [1]=productId, [2]=productName, [3]=price, [4]=quantity
+        UIHelper.bindColumn(colProduct, 2);
+        UIHelper.bindColumn(colPrice, 3, "$");
+        UIHelper.bindColumn(colQuantity, 4);
 
         colSubtotal.setCellValueFactory(data -> {
-            double price = Double.parseDouble(data.getValue()[2]);
-            int qty = Integer.parseInt(data.getValue()[3]);
+            double price = Double.parseDouble(data.getValue()[3]);
+            int qty = Integer.parseInt(data.getValue()[4]);
             return new SimpleStringProperty(String.format("$%.2f", price * qty));
         });
 
         tblSummary.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        // Load cart items
         int userId = UserSession.getInstance().getUserId();
         cartItems = CartDAO.getAllCartItem(userId);
         UIHelper.loadTable(tblSummary, cartItems);
 
-        // Calculate items total
         for (String[] row : cartItems) {
-            itemsTotal += Double.parseDouble(row[2]) * Integer.parseInt(row[3]);
+            itemsTotal += Double.parseDouble(row[3]) * Integer.parseInt(row[4]);
         }
         lblItemsTotal.setText(String.format("Items Total: $%.2f", itemsTotal));
 
-        // Load countries
         cmbCountry.setItems(FXCollections.observableArrayList(ShippingDAO.getAllCountries()));
     }
 
@@ -80,45 +80,37 @@ public class CustomerCheckoutController {
             UIHelper.showMessage(lblMessage, "Please select a shipping country.", false);
             return;
         }
-
         if (cartItems.isEmpty()) {
             UIHelper.showMessage(lblMessage, "Your cart is empty!", false);
             return;
         }
 
         int userId = UserSession.getInstance().getUserId();
-        double grandTotal = itemsTotal + shippingFee;
-
-        // 1. Create the order
-        int orderId = OrderDAO.createOrder(userId, country, shippingFee, grandTotal);
+        int orderId = OrderDAO.createOrder(userId, country, shippingFee, itemsTotal + shippingFee);
         if (orderId < 0) {
-            UIHelper.showMessage(lblMessage, "Failed to create order.", false);
+            UIHelper.showMessage(lblMessage, "Failed to create order. Please try again.", false);
             return;
         }
 
-        // 2. Add each cart item as an order item and reduce stock
+        // Cart row layout: [0]=cartId, [1]=productId, [2]=productName, [3]=price, [4]=quantity
         for (String[] item : cartItems) {
-            int productId = Integer.parseInt(item[0]); // cartId, but we need productId
-            // Note: cartDAO returns cartId, not productId — we need to get productId differently
-            // Actually cart query: c.id, p.name, p.price, c.quantity
-            // We need productId for orderItems. Let's use a workaround:
-            double price = Double.parseDouble(item[2]);
-            int qty = Integer.parseInt(item[3]);
-            OrderDAO.addOrderItem(orderId, getProductIdFromCart(Integer.parseInt(item[0])), qty, price);
+            int productId = Integer.parseInt(item[1]);
+            double price  = Double.parseDouble(item[3]);
+            int qty       = Integer.parseInt(item[4]);
+
+            OrderDAO.addOrderItem(orderId, productId, qty, price);
+
+            // Atomic stock guard — if another user bought the last unit simultaneously, this fails
+            if (!ProductDAO.reduceStock(productId, qty)) {
+                OrderDAO.deleteOrder(orderId); // rollback
+                UIHelper.showMessage(lblMessage,
+                    "Sorry, \"" + item[2] + "\" is out of stock. Your order was not placed.", false);
+                return;
+            }
         }
 
-        // 3. Clear the cart
         CartDAO.removeEntireCart(userId);
-
-        // 4. Navigate to orders
         SceneManager.switchScene("/application/customer/CustomerOrders.fxml");
-    }
-
-    private int getProductIdFromCart(int cartId) {
-        // Query the cart table to get productId by cartId
-        List<String[]> result = DatabaseHelper.query(
-            "SELECT productId FROM cart WHERE id = ?", cartId);
-        return result.isEmpty() ? -1 : Integer.parseInt(result.get(0)[0]);
     }
 
     @FXML
@@ -128,6 +120,7 @@ public class CustomerCheckoutController {
 
     @FXML
     public void logout() {
+        UserSession.clear();
         SceneManager.switchScene("/application/login/LoginView.fxml");
     }
 }

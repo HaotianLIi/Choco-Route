@@ -24,21 +24,19 @@ public class CustomerCartController {
 
     @FXML
     public void initialize() {
-        // Cart query returns: [0]=cartId, [1]=productName, [2]=price, [3]=quantity
+        // Cart row layout: [0]=cartId, [1]=productId, [2]=productName, [3]=price, [4]=quantity
         UIHelper.bindColumn(colCartId, 0);
-        UIHelper.bindColumn(colProduct, 1);
-        UIHelper.bindColumn(colPrice, 2, "$");
-        UIHelper.bindColumn(colQuantity, 3);
+        UIHelper.bindColumn(colProduct, 2);
+        UIHelper.bindColumn(colPrice, 3, "$");
+        UIHelper.bindColumn(colQuantity, 4);
 
-        // Subtotal = price * quantity
         colSubtotal.setCellValueFactory(data -> {
-            double price = Double.parseDouble(data.getValue()[2]);
-            int qty = Integer.parseInt(data.getValue()[3]);
+            double price = Double.parseDouble(data.getValue()[3]);
+            int qty = Integer.parseInt(data.getValue()[4]);
             return new SimpleStringProperty(String.format("$%.2f", price * qty));
         });
 
         spnQuantity.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1));
-
         tblCart.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         loadCart();
     }
@@ -53,7 +51,7 @@ public class CustomerCartController {
     private void updateTotal(List<String[]> items) {
         double total = 0;
         for (String[] row : items) {
-            total += Double.parseDouble(row[2]) * Integer.parseInt(row[3]);
+            total += Double.parseDouble(row[3]) * Integer.parseInt(row[4]);
         }
         lblTotal.setText(String.format("Total: $%.2f", total));
     }
@@ -65,11 +63,7 @@ public class CustomerCartController {
             UIHelper.showMessage(lblMessage, "Select an item first.", false);
             return;
         }
-
-        int cartId = Integer.parseInt(selected[0]);
-        int newQty = spnQuantity.getValue();
-
-        if (CartDAO.updateCartItem(cartId, newQty)) {
+        if (CartDAO.updateCartItem(Integer.parseInt(selected[0]), spnQuantity.getValue())) {
             UIHelper.showMessage(lblMessage, "Quantity updated.", true);
             loadCart();
         } else {
@@ -84,9 +78,8 @@ public class CustomerCartController {
             UIHelper.showMessage(lblMessage, "Select an item first.", false);
             return;
         }
-
         if (CartDAO.removeCartItem(Integer.parseInt(selected[0]))) {
-            UIHelper.showMessage(lblMessage, selected[1] + " removed from cart.", true);
+            UIHelper.showMessage(lblMessage, selected[2] + " removed from cart.", true);
             loadCart();
         } else {
             UIHelper.showMessage(lblMessage, "Failed to remove item.", false);
@@ -110,6 +103,7 @@ public class CustomerCartController {
 
     @FXML
     public void logout() {
+        UserSession.clear();
         SceneManager.switchScene("/application/login/LoginView.fxml");
     }
 }
